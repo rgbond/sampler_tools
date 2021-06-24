@@ -1,4 +1,4 @@
-#Halsampler tools
+# Halsampler tools
 
 These tools provide wrappers for the Linuxcnc halcmd and halsampler utilities.
 They allow the user to set hal pins, log hal pin values, log comments, then start
