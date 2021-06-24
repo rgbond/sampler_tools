@@ -1,0 +1,27 @@
+# Example of a sampler hal file
+#
+# Add this to the hal file list in the .ini file
+# Turns on sampling of tuning parameters when gcode M7 (mist coolant)
+# is encountered. M9 turns it off
+# cfg can be FBSU:
+#   F = floating point
+#   B = Bit
+#   S = Signed 32 bit integer
+#   U = Unsigned 32 bit integer
+#
+# Run hal_sampler in user mode to capture the data
+#
+# Suggested gcode command strings:
+#   F15 G0 X0 Y0 G4 P0.5 M7 G0 X0.1 M9 G4 P0.5 M7 G0 X0.2 M9 P0.5 M7 G0 X0.3 M9
+#   F15 G0 X0 Y0 G4 P0.5 M7 G0 X0.1 G0 X0.2 G0 X0.3 M9
+#   F15 G0 X0 Y0 G4 P0.5 M7 G0 X0.1 G0 X0.0 G0 X0.1 G0 X0.0 G0 X0.1 M9
+#
+loadrt sampler depth=1000 cfg="FFFFF"
+addf sampler.0 servo-thread 
+
+net x-pos-cmd => sampler.0.pin.0
+net x-vel-cmd => sampler.0.pin.1
+net x-output  => sampler.0.pin.2
+net x-pos-fb  => sampler.0.pin.3
+net x-vel-fb  => sampler.0.pin.4
+net sampler_enable iocontrol.0.coolant-mist => sampler.0.enable
