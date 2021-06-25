@@ -22,7 +22,7 @@ if __name__ == '__main__':
     ap.add_argument('files', nargs='*', help='list of files to process')
     args = ap.parse_args()
 
-    log_db = logger.db('log.db')
+    log_db = log_hs.db('log.db')
 
     if args.dump:
         log_db.dump_db()
