@@ -7,7 +7,7 @@ import sys
 import argparse
 import sqlite3
 
-import logger
+import log_hs
 
 
 if __name__ == '__main__':
@@ -18,10 +18,10 @@ if __name__ == '__main__':
     ap.add_argument('comment', help='comment to add')
     args = ap.parse_args()
 
-    log_db = logger.db('log.db')
+    log_db = log_hs.db('log.db')
 
     if len(args.comment) == 0:
-        print("Must list at least one comment on the command line")
+        print("Must be a comment on the command line")
         exit(1)
 
     log_db.add_comment(args.file, args.comment)
