@@ -38,7 +38,7 @@ def process_file(f, fields, scale):
     lscale = []
     for field in fields:
         if field not in labels:
-            print(arg, "not in file header")
+            print(field, "not in file header")
             exit(1)
     for i, l in enumerate(labels):
         if l in fields:

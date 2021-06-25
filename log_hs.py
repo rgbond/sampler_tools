@@ -15,19 +15,31 @@ import sqlite3
 
 # Change these as needed for each run:
 to_set = {
-    "x.pid.Pgain": 30.0,
-    "x.pid.Igain": 0.0,
-    "x.pid.Dgain": 0.0,
+    "pid.x.Pgain": 40.0,
+    "pid.x.Igain": 0.0,
+    "pid.x.Dgain": 0.0,
 }
 
 to_log = [
-    "x.pid.Pgain",
-    "x.pid.Igain",
+    "pid.x.Pgain",
+    "pid.x.Dgain",
+    "pid.x.Igain",
+    "pid.x.FF0",
+    "pid.x.FF1",
+    "pid.x.FF2",
+    "pid.x.maxerror",
+    "ini.0.max_acceleration",
+    "ini.0.max_velocity",
+    "ini.traj_max_acceleration",
+    "ini.traj_max_velocity",
+    "hm2_7i95.0.stepgen.00.maxaccel",
+    "hm2_7i95.0.stepgen.00.maxvel",
+    "hm2_7i95.0.stepgen.00.control-type",
+    "hm2_7i95.0.stepgen.00.position-scale",
 ]
 
 comments = [
-    "comment 1",
-    "comment 2",
+    "run_x_300_F15_nobl.ngc",
 ]
 
 sampler_nets = [
@@ -119,8 +131,8 @@ def get_pin(v):
     return result.stdout
 
 class sampler():
-    def start_sampler(self, lfn):
-        self.p = subprocess.Popen(["halsampler", lfn])
+    def start_sampler(self, f):
+        self.p = subprocess.Popen(["halsampler"], stdout=f)
 
     def abort_sampler(self):
         self.p.terminate()
@@ -175,14 +187,14 @@ if __name__ == '__main__':
     log_file = open(log_file_name, "w")
     hdr = " ".join(sampler_nets)
     log_file.write(hdr + '\n')
-    log_file.close()
+    log_file.flush()
 
     # Cygwin hack until I spend time on ACLs
     os.chmod(log_file_name, 0o644)
 
     s = sampler()
     input("hit return to start sampler")
-    s.start_sampler(log_file_name)
+    s.start_sampler(log_file)
 
     input("hit return to abort sampler")
     s.abort_sampler()
