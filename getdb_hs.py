@@ -42,12 +42,12 @@ if __name__ == '__main__':
                 print("Nothing logged for", f)
             else:
                 for entry in l:
-                    print(f, entry[2], entry[3])
+                    print(entry[0], entry[1], entry[2], entry[3])
         if args.comments:
             c = log_db.get_comments(f)
             if len(c) == 0:
                 print("No comments for", f)
             else:
                 for entry in c:
-                    print(f, entry[2])
+                    print(entry[0], entry[1], entry[2])
 

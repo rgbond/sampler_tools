@@ -75,10 +75,12 @@ drops_sql = [
 
 add_log_sql = 'INSERT INTO log(file_name, param_name, param_value) VALUES(?,?,?)'
 add_comment_sql = 'INSERT INTO comments(file_name, comment) VALUES(?,?)'
-dump_log_sql = 'SELECT * FROM log';
-dump_comments_sql = 'SELECT * FROM comments';
-get_log_sql = 'SELECT * FROM log where file_name = ?';
-get_comments_sql = 'SELECT * FROM comments where file_name = ?';
+dump_log_sql = 'SELECT * FROM log'
+dump_comments_sql = 'SELECT * FROM comments'
+get_log_sql = 'SELECT * FROM log where file_name = ?'
+get_comments_sql = 'SELECT * FROM comments where file_name = ?'
+del_log_sql = 'DELETE FROM log WHERE log.k = ?'
+del_comment_sql = 'DELETE FROM comments WHERE comments.k = ?'
 
 class db(object):
     def __init__(self, db_path, setup=False, verbose=False):
@@ -109,10 +111,10 @@ class db(object):
     def dump_db(self):
         self.c.execute(dump_log_sql)
         for r in self.c.fetchall():
-            print(r[1], r[2], r[3])
+            print(r[0], r[1], r[2], r[3])
         self.c.execute(dump_comments_sql)
         for r in self.c.fetchall():
-            print(r[1], r[2])
+            print(r[0], r[1], r[2])
 
     def get_log(self, f):
         self.c.execute(get_log_sql, (f,))
@@ -121,6 +123,12 @@ class db(object):
     def get_comments(self, f):
         self.c.execute(get_comments_sql, (f,))
         return self.c.fetchall()
+
+    def del_comment(self, k):
+        self.c.execute(del_comment_sql, (k,))
+
+    def del_log(self, k):
+        self.c.execute(del_log_sql, (k,))
 
 def set_pin(v, f):
     subprocess.run(["halcmd", "setp", v, str(f)])
