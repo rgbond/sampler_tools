@@ -29,6 +29,6 @@ field name can be extended with a ":n" to scale that field. For example, to see
 data is displayed on one screen to help show what changed between runs.
 
 logdb.py has a command style interface that allows the user to dump the database,
-query it, add or remove comments.
+query it, add or remove previously logged comments.
 
 The utilities require python3 versions of matplotlib, sqlite3 and numpy.
