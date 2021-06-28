@@ -5,7 +5,7 @@ They allow the user to set hal pins, log hal pin values, log comments, then star
 halsampler, saving the run in an automatically generated output file. All log
 data is captured in a local sqlite database called log.db. The halsampler data can
 be plotted via plot_hs.py. The logged hal data and comments can be dumped via
-getdb_hs.py
+logdb.py
 
 To use log_hs.py, first edit log_hs.py and change these python arrays as needed:
 
@@ -28,8 +28,7 @@ field name can be extended with a ":n" to scale that field. For example, to see
 "-f x-vel-cmd:60". Plot_hs.py takes a list of one or more log file names. All
 data is displayed on one screen to help show what changed between runs.
 
-getdb_hs.py prints logged data from the database. To see everything in the
-database, use "getdb_hs.py -d". To see pins logged in file 001.out, use
-"getdb_hs.py -l 001.out"
+logdb.py has a command style interface that allows the user to dump the database,
+query it, add or remove comments.
 
 The utilities require python3 versions of matplotlib, sqlite3 and numpy.
