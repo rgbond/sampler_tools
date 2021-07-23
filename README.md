@@ -7,6 +7,11 @@ All log data is captured in a local sqlite database called log.db. The halsample
 data can be plotted via plot_hs.py. The logged hal data and comments can be dumped
 via logdb.py
 
+The commands are:
+* log_hs.py log data and run halsampler
+* plot_hs.py plot the data returned from halsampler
+* logdb.py examine and manipulate the data in the database
+
 To use log_hs.py, first edit log_hs.py and change these python arrays as needed:
 
 * to_set: hal pins or nets to set before the run starts.
@@ -32,7 +37,13 @@ field name can be extended with a ":n" to scale that field. For example, to see
 "-f x-vel-cmd:60". Plot_hs.py takes a list of one or more log file names. All
 data is displayed on one screen to help show what changed between runs.
 
+This command generated screenshot.png
+    plot_hs.py -f x-vel-cmd -f x-vel-fb 001.out 002.out
+
 logdb.py has a command style interface that allows the user to dump the database,
 query it, add or remove previously logged comments.
+
+To install, just save the three python files in a directory somewhere. I use
+linuxcnc/nc_files/tuning so that the gcode files are "next door".
 
 The utilities require python3 versions of matplotlib, sqlite3 and numpy.
