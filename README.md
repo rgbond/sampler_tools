@@ -9,17 +9,17 @@ via logdb.py
 
 To use log_hs.py, first edit log_hs.py and change these python arrays as needed:
 
-*to_set: hal pins or nets to set before the run starts.
-*to_log: hal pins or nets to log before the run starts.
-*comments: any comments you want logged in the database for this run.
-*sampler_nets: The nets that the sampler hal utility is saving for halsampler.
+* to_set: hal pins or nets to set before the run starts.
+* to_log: hal pins or nets to log before the run starts.
+* comments: any comments you want logged in the database for this run.
+* sampler_nets: The nets that the sampler hal utility is saving for halsampler.
 
 Then run the command. It will:
-*create the database if it doesn't exist,
-*create a log file for halsampler to use, 
-*log the info in the database, 
-*log the sampler_nets information as the first line of the log file,
-*start halsampler. 
+* create the database if it doesn't exist,
+* create a log file for halsampler to use, 
+* log the info in the database, 
+* log the sampler_nets information as the first line of the log file,
+* start halsampler. 
 
 At this point the user would normally run a gcode file that
 triggers sampler. When the run ends, hit return and halsampler will be
