@@ -38,7 +38,7 @@ field name can be extended with a ":n" to scale that field. For example, to see
 data is displayed on one screen to help show what changed between runs.
 
 This command generated screenshot.png
-    plot_hs.py -f x-vel-cmd -f x-vel-fb 001.out 002.out
+* plot_hs.py -f x-vel-cmd -f x-vel-fb 001.out 002.out
 
 logdb.py has a command style interface that allows the user to dump the database,
 query it, add or remove previously logged comments.
