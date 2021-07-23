@@ -41,7 +41,12 @@ This command generated screenshot.png
 * plot_hs.py -f x-vel-cmd -f x-vel-fb 001.out 002.out
 
 logdb.py has a command style interface that allows the user to dump the database,
-query it, add or remove previously logged comments.
+query it, add or remove previously logged comments. Sample commands:
+* logdb.py dump
+* logdb.py print 001.out 002.out
+* logdb.py comment 001.out "a little better"
+* logdb.py delete 22
+
 
 To install, just save the three python files in a directory somewhere. I use
 linuxcnc/nc_files/tuning so that the gcode files are "next door".
