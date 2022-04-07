@@ -2,13 +2,14 @@
 #
 # plots halsampler output
 #
-# Usage errplt file col1 col3 ... coln
-#     assumes the columns of data have a label in row 1
-#
+# Assumes data files have lables in row 1:
 # x-pos-cmd x-vel-cmd x-pid-out x-pos-fb x-vel-fb
 # 0.000000 0.000000 -0.012800 0.005709 -0.011239 
 # 0.000000 0.000000 -0.012800 0.005709 -0.011239 
 # 0.000000 0.000000 -0.012800 0.005709 -0.011239 
+#
+# Usage plot_hs -f col1 -f col2 ... -f coln file1 file2
+#     assumes the columns of data have a label in row 1
 #
 # The colx arguments pick off columns to plot from the file
 # example:
@@ -16,7 +17,10 @@
 # echo 'x-pos-cmd x-vel-cmd x-pid-out x-pos-fb x-vel-fb' > run.out
 # halsampler -c 0 >> run.out
 #
-# errplt run.out x-pos-cmd x-pos-fb
+# plot_hs -f x-pos-cmd -f x-pos-fb run.out
+#
+# The program plots all of the fields in the data file if called with
+# no "-f" arguments.
 #
 # Copyright 2021 Robert Bond
 #
@@ -48,6 +52,11 @@ def process_file(f, fields, scale):
         print("0.000000 0.000000 -0.012800")
         exit(1)
     labels = lines[0].strip().split()
+    if len(fields) == 0:
+        fields = labels
+        scale = {}
+        for f in fields:
+            scale[f] = 1.0
     indicies = []
     lscale = []
     for field in fields:
@@ -103,14 +112,16 @@ if __name__ == "__main__":
 
     scale = {}
     fields = []
-    for f in args.field:
-        if ':' in f:
-            fs = f.split(':')
-            fields.append(fs[0])
-            scale[fs[0]] = float(fs[1]) 
-        else:
-            fields.append(f)
-            scale[f] = 1.0
+    if not (args.field is None):
+        for f in args.field:
+            if ':' in f:
+                fs = f.split(':')
+                fields.append(fs[0])
+                scale[fs[0]] = float(fs[1])
+            else:
+                fields.append(f)
+                scale[f] = 1.0
+    print(fields)
 
     if args.verbose > 0:
         print("fields:", fields)
