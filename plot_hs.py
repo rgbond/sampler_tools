@@ -53,49 +53,34 @@ def process_file(x_name, f, fields, scale):
         print("x-pos-cmd x-vel-cmd x-pos.out")
         print("0.000000 0.000000 -0.012800")
         exit(1)
-    labels = lines[0].strip().split()
-    if x_name is None:
-        x_index = None
-        xi = 0.0
-    else:
-        if x_name in labels:
-            x_index = labels.index(x_name)
-            x_scale = scale[x_name]
-        else:
-            print(x_name, "not in file header")
-            exit(1)
+    file_labels = lines[0].strip().split()
     if len(fields) == 0:
-        fields = labels
+        fields = file_labels
         scale = {}
-        for f in fields:
-            scale[f] = 1.0
     indicies = []
-    lscale = []
     for field in fields:
-        if not (field in labels):
+        if not (field in file_labels):
             print(field, "not in file header")
             exit(1)
-    for i, l in enumerate(labels):
+    for i, l in enumerate(file_labels):
         if l in fields:
             indicies.append(i)
-            lscale.append(scale[l])
-        else:
-            lscale.append(1.0)
-    plot_labels = [labels[i] for i in indicies]
+    plot_labels = [file_labels[i] for i in indicies]
     plot_data = []
-    x_values = []
     for line in lines[1:]:
         lf = line.strip().split()
         if lf[0].isalpha():
             print("skipping", lf[0])
             continue
-        plot_data.append([float(lf[i]) * lscale[i] for i in indicies])
-        if x_index is None:
-            x_values.append(xi)
-            xi += 1.0
-        else:
-            x_values.append(float(lf[x_index]) * x_scale)
-    return plot_labels, x_values, np.array(plot_data).transpose()
+        plot_data.append([float(lf[i]) for i in indicies])
+    plot_data = np.array(plot_data).transpose()
+    for s in scale:
+        plot_data[plot_labels.index(s),:] *= scale[s]
+    if x_name is None:
+        x_values = np.arange(len(plot_data[0,:]), dtype=float)
+    else:
+        x_values = plot_data[plot_labels.index(x_name),:]
+    return plot_labels, x_values, plot_data
         
 def handle_scale_factor(f, scale):
     if ':' in f:
@@ -103,7 +88,6 @@ def handle_scale_factor(f, scale):
         scale[fs[0]] = float(fs[1])
         return fs[0]
     else:
-        scale[f] = 1.0
         return f
 
 class plotter(object):
