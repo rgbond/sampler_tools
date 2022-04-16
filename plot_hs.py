@@ -41,10 +41,11 @@
 
 import sys
 import argparse
+import re
 import matplotlib.pyplot as plt
 import numpy as np
 
-def process_file(x_name, f, fields, scale):
+def process_file(x_name, f, fields, scale, delay):
     n = 0
     lines = f.readlines()
     if len(lines) < 2:
@@ -76,19 +77,26 @@ def process_file(x_name, f, fields, scale):
     plot_data = np.array(plot_data).transpose()
     for s in scale:
         plot_data[plot_labels.index(s),:] *= scale[s]
+    for d in delay:
+        field_index = plot_labels.index(d)
+        ticks = delay[d]
+        nl = np.roll(plot_data[field_index], ticks)
+        nl[:ticks] = [nl[ticks] for item in nl[:ticks]]
+        plot_data[field_index] = nl
     if x_name is None:
         x_values = np.arange(len(plot_data[0,:]), dtype=float)
     else:
         x_values = plot_data[plot_labels.index(x_name),:]
     return plot_labels, x_values, plot_data
         
-def handle_scale_factor(f, scale):
-    if ':' in f:
-        fs = f.split(':')
-        scale[fs[0]] = float(fs[1])
-        return fs[0]
-    else:
-        return f
+def handle_field_options(f, scale, delay):
+    fs = re.split("(:|\^)", f)
+    for i in range(len(fs)):
+        if ':' in fs[i]:
+            scale[fs[0]] = float(fs[i+1])
+        if '^' in fs[i]:
+                delay[fs[0]] = int(fs[i+1])
+    return fs[0]
 
 class plotter(object):
     def __init__(self, nplots):
@@ -122,14 +130,15 @@ if __name__ == "__main__":
     args = ap.parse_args()
 
     scale = {}
+    delay = {}
+    fields = []
     if args.x is None:
         x_name = None
     else:
-        x_name = handle_scale_factor(args.x, scale)
-    fields = []
+        x_name = handle_field_options(args.x, scale, delay)
     if not args.field is None:
         for f in args.field:
-            f = handle_scale_factor(f, scale)
+            f = handle_field_options(f, scale, delay)
             fields.append(f)
     if args.verbose > 0:
         print("fields:", fields)
@@ -139,7 +148,8 @@ if __name__ == "__main__":
     for fname in args.files:
         try:
             f = open(fname, 'r')
-            labels, x_values, data = process_file(x_name, f, fields, scale)
+            labels, x_values, data = process_file(x_name, f, fields,
+                                                  scale, delay)
             plot.plot_subplot(labels, x_values, data, fname)
             f.close()
         except IOError as e:
