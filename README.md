@@ -31,14 +31,16 @@ triggers sampler. When the run ends, hit return and halsampler will be
 terminated.
 
 plot_hs.py takes optional "-f field" command line arguments to specify the
-fields to plot.  Valid field names appear in the first line of the log file. The
-field name can be extended with a ":n" to scale that field. For example, to see
-"x-vel-cmd" in inches per minute rather than inches per second, use
-"-f x-vel-cmd:60". Plot_hs.py takes a list of one or more log file names. All
-data is displayed on one screen to help show what changed between runs.
-
-This command generated screenshot.png
+fields to plot.  Valid field names appear in the first line of the log file.
+This command generated screenshot.png:
 * plot_hs.py -f x-vel-cmd -f x-vel-fb 001.out 002.out
+
+Field name modifiers:
+* ':n' Multiply field values by n
+* '^d' Delay field by d ticks
+
+For example, use "-f x-vel-cmd:60" to see velocity in inches per minute
+rather than inches per second.
 
 plot_hs.py can have a "-x field" argument to specify the field value to use
 as the x axis in the plot.
